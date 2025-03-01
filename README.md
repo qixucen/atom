@@ -8,7 +8,7 @@ Atom of Thoughts (AoT) is a new reasoning framework that represents the solution
 
 **Key Features:**
 
-- **General Enhancement**: Works across diverse reasoning scenarios including math, multi-choice, and multi-hop QA with the same codebase, differentiated only by task-specific prompts
+- **General Reasoning Capability**: Works across diverse reasoning scenarios including math, multi-choice, and multi-hop QA with the same codebase, differentiated only by task-specific prompts
 - **Plug-in Enhancement**: Can be integrated with existing test-time scaling methods to improve their performance
 - **Resource Efficiency**: Focuses computational resources on effective reasoning rather than processing historical information
 - **Superior Performance**: Outperforms existing methods across multiple benchmarks, enabling gpt-4o-mini to surpass o3-mini by 3.4% and DeepSeek-R1 by 10.6% on HotpotQA
