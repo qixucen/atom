@@ -1,2 +1,4 @@
+__pycache__
+experiment/__pycache__
 apikey.py
 log/*
