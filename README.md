@@ -1,6 +1,6 @@
 # Atom of Thoughts (AoT)
 
-This is a lightweight, standalone implementation of the paper [Atom of Thoughts for Markov LLM Test-Time Scaling](https://arxiv.org/abs/2502.12018). An implementation under the [MetaGPT framework](https://github.com/geekan/MetaGPT) is also coming soon, which will be suitable for users familiar with that framework and its excellent open-source projects (including but not limited to [AFlow](https://arxiv.org/abs/2410.10762) (ICLR 2025 Oral) and [SPO](https://arxiv.org/abs/2502.06855)).
+This is a lightweight, standalone implementation of the paper [Atom of Thoughts for Markov LLM Test-Time Scaling](https://arxiv.org/abs/2502.12018). An implementation under the [MetaGPT](https://github.com/geekan/MetaGPT) framework is also coming soon, which will be suitable for users familiar with that framework and its excellent open-source projects (including but not limited to [AFlow](https://arxiv.org/abs/2410.10762) (ICLR 2025 Oral) and [SPO](https://arxiv.org/abs/2502.06855)).
 
 ## Overview
 
