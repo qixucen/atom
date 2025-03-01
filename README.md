@@ -4,31 +4,14 @@ This is the official implementation of the paper [Atom of Thoughts for Markov LL
 
 ## Overview
 
-Atom of Thoughts (AoT) is a revolutionary reasoning framework that progressively decomposes complex problems into atomic units while maintaining Markov property. This approach significantly enhances large language models' performance on reasoning tasks while reducing computational waste.
+Atom of Thoughts (AoT) is a new reasoning framework that represents the solution as a composition of atomic questions. This approach transforms the reasoning process into a Markov process with atomic states, where state transitions use a two-phase mechanism: first decomposing the current question into a temporary dependency-based directed acyclic graph, then contracting its subquestions to form a new atomic question state. AoT significantly enhances large language models' performance on reasoning tasks while reducing computational waste. Additionally, these atomic states enable AoT to function as a plugin for existing test-time scaling methods, allowing for flexible integration that combines the strengths of different approaches.
 
 **Key Features:**
 
-- **Markov Property**: Each state transition depends only on the current state, eliminating the need to maintain historical information
+- **General Enhancement**: Works across diverse reasoning scenarios including math, multi-choice, and multi-hop QA with the same codebase, differentiated only by task-specific prompts
 - **Plug-in Enhancement**: Can be integrated with existing test-time scaling methods to improve their performance
 - **Resource Efficiency**: Focuses computational resources on effective reasoning rather than processing historical information
 - **Superior Performance**: Outperforms existing methods across multiple benchmarks, enabling gpt-4o-mini to surpass o3-mini by 3.4% and DeepSeek-R1 by 10.6% on HotpotQA
-
-## Quick Start
-
-Run experiments on different datasets:
-
-```bash
-python main.py --dataset math --start 0 --end 10 --model gpt-4o-mini
-```
-
-Supported datasets:
-
-- MATH
-- GSM8K  
-- BBH
-- MMLU
-- HotpotQA
-- LongBench
 
 ## API Configuration Setup
 
@@ -43,6 +26,32 @@ api_key = [
     # You can add multiple API keys as backups
 ]
 ```
+
+## Quick Start
+
+### Atom Mode: Using AoT as a reasoning method
+
+Evaluate the performance of AoT on a specific dataset:
+
+```bash
+python main.py --dataset math --start 0 --end 10 --model gpt-4o-mini
+```
+
+### Plugin Mode: Generating Contracted Dataset
+
+Generate a contracted dataset for a specific dataset:
+
+```bash
+python main.py --dataset math --mode plugin --start 0 --end 10 --model gpt-4o-mini
+```
+
+### Command Arguments:
+- `--dataset`: Choose from `math`, `gsm8k`, `bbh`, `mmlu`, `hotpotqa`, or `longbench`
+- `--start` and `--end`: Specify the range of examples to evaluate (e.g., 0-10 for first 10 examples)
+- `--model`: Model name of the LLM to use
+- `--mode`: Choose between `atom` (main experiment) or `plugin` (generate contracted dataset)
+
+The `plugin` mode enables AoT to serve as a preprocessing step that generates contracted questions which can then be fed into other reasoning frameworks. This approach combines the benefits of AoT's atomic state representation with other test-time scaling methods, allowing the contracted questions to maintain answer equivalence with the original questions while eliminating unnecessary historical information.
 
 ## Citation
 
