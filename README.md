@@ -1,14 +1,17 @@
 # Atom of Thoughts (AoT)
 
-This is the official implementation of the paper [Atom of Thoughts for Markov LLM Test-Time Scaling](https://arxiv.org/abs/xxx.xxxx).
+This is the official implementation of the paper [Atom of Thoughts for Markov LLM Test-Time Scaling](https://arxiv.org/abs/2502.12018).
 
 ## Overview
 
-AoT is a novel reasoning framework that progressively decomposes complex problems into atomic units while maintaining Markov property. The key features include:
+Atom of Thoughts (AoT) is a revolutionary reasoning framework that progressively decomposes complex problems into atomic units while maintaining Markov property. This approach significantly enhances large language models' performance on reasoning tasks while reducing computational waste.
+
+**Key Features:**
 
 - **Markov Property**: Each state transition depends only on the current state, eliminating the need to maintain historical information
 - **Plug-in Enhancement**: Can be integrated with existing test-time scaling methods to improve their performance
 - **Resource Efficiency**: Focuses computational resources on effective reasoning rather than processing historical information
+- **Superior Performance**: Outperforms existing methods across multiple benchmarks, enabling gpt-4o-mini to surpass o3-mini by 3.4% and DeepSeek-R1 by 10.6% on HotpotQA
 
 ## Quick Start
 
