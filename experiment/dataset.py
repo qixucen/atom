@@ -3,7 +3,7 @@ import os
 from functools import lru_cache
 
 @lru_cache(maxsize=None)
-def load_data(data_name, split=None):
+def load_data(data_name, split="test"):
     # Determine file path
     file_path = f"experiment/data/{data_name}/{split}.json"
     

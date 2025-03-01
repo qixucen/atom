@@ -23,7 +23,7 @@ Before using the Atom of Thoughts (AoT) framework, you need to set up your API k
 url = "https://api.openai.com/v1"  # Replace with your API endpoint
 api_key = [
     "your-api-key-here",  # Replace with your actual API key
-    # You can add multiple API keys as backups
+    # You can add multiple API keys to improve concurrency performance.
 ]
 ```
 
