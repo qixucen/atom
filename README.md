@@ -45,7 +45,8 @@ Generate a contracted dataset for a specific dataset:
 python main.py --dataset math --mode plugin --start 0 --end 10 --model gpt-4o-mini
 ```
 
-### Command Arguments:
+### Command Arguments
+
 - `--dataset`: Choose from `math`, `gsm8k`, `bbh`, `mmlu`, `hotpotqa`, or `longbench`
 - `--start` and `--end`: Specify the range of examples to evaluate (e.g., 0-10 for first 10 examples)
 - `--model`: Model name of the LLM to use
