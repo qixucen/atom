@@ -2,13 +2,13 @@
 
 This is a lightweight, standalone implementation of the paper [Atom of Thoughts for Markov LLM Test-Time Scaling](https://arxiv.org/abs/2502.12018). An implementation under the [MetaGPT](https://github.com/geekan/MetaGPT) framework is also coming soon, which will be suitable for users familiar with that framework and its excellent open-source projects (including but not limited to [AFlow](https://arxiv.org/abs/2410.10762) (ICLR 2025 Oral) and [SPO](https://arxiv.org/abs/2502.06855)).
 
-## News
+## 📰 News
 
 We're thrilled by the amazing community response to our [initial announcement](https://x.com/didiforx/status/1895902471635288252) and grateful for all the engaging discussions. While this repository is a streamlined version optimized for clarity and ease of use (compared to our more comprehensive experimental codebase), we're committed to supporting your implementation journey.
 
 While we have received several successful reproduction feedbacks, if you encounter any issues during implementation or have questions, please don't hesitate to reach out via email at <steamedbun2002@outlook.com>.
 
-## What We Will Do Next
+## 🎯 What We Will Do Next
 
 **Enhancing Reproducibility:**
 We are continuously working to improve the reproducibility of this codebase. Inspired by our previous works (AFlow and SPO), we plan to implement automatic prompt optimization for different scenarios as one possible approach, making the framework more robust and easier to adapt across various use cases.
@@ -16,7 +16,7 @@ We are continuously working to improve the reproducibility of this codebase. Ins
 **Advancing Atomic Reasoning:**
 Atomic reasoning remains underexplored, yet vital. Can LLMs master slow, atomic reasoning in the same way that models like o1 and R1 have mastered long CoT reasoning? This question requires continuous exploration and investigation. We are committed to advancing this research direction and sharing our insights with the community as we progress.
 
-## Overview
+## 📖 Overview
 
 Atom of Thoughts (AoT) is a new reasoning framework that represents the solution as a composition of atomic questions. This approach transforms the reasoning process into a Markov process with atomic states, where state transitions use a two-phase mechanism: first decomposing the current question into a temporary dependency-based directed acyclic graph, then contracting its subquestions to form a new atomic question state. AoT significantly enhances large language models' performance on reasoning tasks while reducing computational waste. Additionally, these atomic states enable AoT to function as a plugin for existing test-time scaling methods, allowing for flexible integration that combines the strengths of different approaches.
 
@@ -27,7 +27,7 @@ Atom of Thoughts (AoT) is a new reasoning framework that represents the solution
 - **Resource Efficiency**: Focuses computational resources on effective reasoning rather than processing historical information
 - **Superior Performance**: Outperforms existing methods across multiple benchmarks, enabling gpt-4o-mini to surpass o3-mini by 3.4% and DeepSeek-R1 by 10.6% on HotpotQA
 
-## API Configuration Setup
+## ⚙️ API Configuration Setup
 
 Before using the Atom of Thoughts (AoT) framework, you need to set up your API key and URL:
 
@@ -41,7 +41,7 @@ api_key = [
 ]
 ```
 
-## Quick Start
+## 🚀 Quick Start
 
 ### Atom Mode: Using AoT as a reasoning method
 
@@ -68,7 +68,7 @@ python main.py --dataset math --mode plugin --start 0 --end 10 --model gpt-4o-mi
 
 The `plugin` mode enables AoT to serve as a preprocessing step that generates contracted questions which can then be fed into other reasoning frameworks. This approach combines the benefits of AoT's atomic state representation with other test-time scaling methods, allowing the contracted questions to maintain answer equivalence with the original questions while eliminating unnecessary historical information.
 
-## Citation
+## 📝 Citation
 
 ```bibtex
 @article{teng2024atom,
