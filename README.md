@@ -11,7 +11,10 @@ While we have received several successful reproduction feedbacks, if you encount
 ## 🎯 What We Will Do Next
 
 **Enhancing Reproducibility:**
-We are continuously working to improve the reproducibility of this codebase. Inspired by our previous works (AFlow and SPO), we plan to implement automatic prompt optimization for different scenarios as one possible approach, making the framework more robust and easier to adapt across various use cases.
+We are continuously working to improve the reproducibility of this codebase. Following our commitment, we plan to implement this framework under MetaGPT, making it more accessible for users familiar with the ecosystem.
+
+**Expanding Functionality:**
+We are developing additional features including automatic framework optimization (following our previous works AFlow and SPO) and support for custom datasets, aiming to make the framework more versatile and user-friendly.
 
 **Advancing Atomic Reasoning:**
 Atomic reasoning remains underexplored, yet vital. Can LLMs master slow, atomic reasoning in the same way that models like o1 and R1 have mastered long CoT reasoning? This question requires continuous exploration and investigation. We are committed to advancing this research direction and sharing our insights with the community as we progress.
