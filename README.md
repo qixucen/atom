@@ -6,7 +6,11 @@ This is a lightweight, standalone implementation of the paper [Atom of Thoughts 
 
 We're thrilled by the amazing community response to our [initial announcement](https://x.com/didiforx/status/1895902471635288252) (160K+ views) and grateful for all the engaging discussions. While this repository is a streamlined version optimized for clarity (compared to our more comprehensive experimental codebase), we're committed to supporting your implementation journey.
 
-While we have received several successful reproduction feedbacks, there might be potential issues we haven't caught yet. If you encounter any issues during implementation or have questions, please don't hesitate to reach out via email at <steamedbun2002@outlook.com>.
+While we have received several successful reproduction feedbacks, there might be potential issues we haven't caught yet. 
+
+> Author's note: Being perhaps overconfident in my coding abilities and not expecting such rapid attention for my first first-author paper, I admittedly didn't test the codebase as meticulously as I should have.
+
+If you encounter any issues during implementation or have questions, please don't hesitate to reach out via email at <steamedbun2002@outlook.com>.
 
 ## 🎯 What We Will Do Next
 
