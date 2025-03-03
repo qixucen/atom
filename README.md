@@ -25,7 +25,7 @@ Atomic reasoning remains underexplored, yet vital. Can LLMs master slow, atomic 
 
 ## 💬 Community Discussions
 
-- [X Post](https://x.com/didiforx/status/1895902471635288252) by co-author [Jiayi Zhang](https://didiforgithub.com)
+- [X Post](https://x.com/didiforx/status/1895902471635288252) by co-author [Jiayi Zhang](https://didiforgithub.github.io/)
 - [Reddit Discussion](https://www.reddit.com/r/LocalLLaMA/comments/1j29hm0/new_atom_of_thoughts_looks_promising_for_helping/)
 
 ## 📖 Overview
