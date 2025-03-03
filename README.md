@@ -23,6 +23,11 @@ We are developing additional features including automatic framework optimization
 **Advancing Atomic Reasoning:**
 Atomic reasoning remains underexplored, yet vital. Can LLMs master slow, atomic reasoning in the same way that models like o1 and R1 have mastered long CoT reasoning? This question requires continuous exploration and investigation. We are committed to advancing this research direction and sharing our insights with the community as we progress.
 
+## 💬 Community Discussions
+
+- [X](https://x.com/didiforx/status/1895902471635288252)
+- [Reddit](https://www.reddit.com/r/LocalLLaMA/comments/1j29hm0/new_atom_of_thoughts_looks_promising_for_helping/)
+
 ## 📖 Overview
 
 Atom of Thoughts (AoT) is a new reasoning framework that represents the solution as a composition of atomic questions. This approach transforms the reasoning process into a Markov process with atomic states, where state transitions use a two-phase mechanism: first decomposing the current question into a temporary dependency-based directed acyclic graph, then contracting its subquestions to form a new atomic question state. AoT significantly enhances large language models' performance on reasoning tasks while reducing computational waste. Additionally, these atomic states enable AoT to function as a plugin for existing test-time scaling methods, allowing for flexible integration that combines the strengths of different approaches.
