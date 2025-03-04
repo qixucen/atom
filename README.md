@@ -4,7 +4,7 @@ This is a lightweight, standalone implementation of the paper [Atom of Thoughts 
 
 ## 📰 News
 
-We're thrilled by the amazing community response to our [initial announcement](https://x.com/didiforx/status/1895902471635288252) (300K+ views in 48 hours) and grateful for all the engaging discussions.
+We're thrilled by the amazing community response to our [post](https://x.com/didiforx/status/1895902471635288252) (350K+ views) and grateful for all the engaging discussions.
 
 While we have received several successful reproduction feedbacks, there might be potential issues we haven't caught yet. 
 
@@ -22,11 +22,6 @@ We are developing additional features including automatic framework optimization
 
 **Advancing Atomic Reasoning:**
 Atomic reasoning remains underexplored, yet vital. Can LLMs master slow, atomic reasoning in the same way that models like o1 and R1 have mastered long CoT reasoning? This question requires continuous exploration and investigation. We are committed to advancing this research direction and sharing our insights with the community as we progress.
-
-## 💬 Community Discussions
-
-- [X Post](https://x.com/didiforx/status/1895902471635288252) by co-author [Jiayi Zhang](https://didiforgithub.github.io/)
-- [Reddit Discussion](https://www.reddit.com/r/LocalLLaMA/comments/1j29hm0/new_atom_of_thoughts_looks_promising_for_helping/)
 
 ## 📖 Overview
 
