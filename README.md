@@ -4,7 +4,7 @@ This is a lightweight, standalone implementation of the paper [Atom of Thoughts 
 
 ## 📰 News
 
-We're thrilled by the amazing community response to our [post](https://x.com/didiforx/status/1895902471635288252) (350K+ views) and grateful for all the engaging discussions.
+We're thrilled by the amazing community response to our [post](https://x.com/didiforx/status/1895902471635288252)<img src="https://img.shields.io/badge/Views-350K+-blue?logo=x&style=flat" style="display: inline-block; vertical-align: middle;"> and grateful for all the engaging discussions.
 
 While we have received several successful reproduction feedbacks, there might be potential issues we haven't caught yet. 
 
