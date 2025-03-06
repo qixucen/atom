@@ -3,10 +3,7 @@ import os
 import json
 import re
 import string
-import subprocess
 from collections import Counter
-import signal
-import ast
 from typing import List, Union
 
 def extract_json(string):
@@ -119,7 +116,6 @@ def calculate_depth(sub_questions: list):
         return 3
 
 def get_next_log_file(log_dir, size, dataset):
-    """获取下一个日志文件路径，排除score.json"""
     directory = log_dir.format(dataset=dataset, size=size)
     os.makedirs(directory, exist_ok=True)
     
