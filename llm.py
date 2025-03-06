@@ -1,22 +1,10 @@
 import random
 import asyncio
 import openai
-import httpx
 from apikey import url, api_key
 from functools import lru_cache
 
-transport = httpx.AsyncHTTPTransport(local_address="192.168.1.2")
-direct_client = httpx.AsyncClient(
-    transport=transport,
-    proxies=None,
-    verify=False
-)
 model_name = None
-
-class DirectHttpClient(openai.AsyncClient):
-    def __init__(self, **kwargs):
-        kwargs['http_client'] = direct_client
-        super().__init__(**kwargs)
 
 if isinstance(api_key, list):
     clients = [openai.AsyncClient(base_url=url, api_key=key) for key in api_key]
@@ -86,25 +74,6 @@ async def gen(msg, model=None, temperature=None, response_format="json_object"):
 
     print(f"Error log: {errors}")
 
-# 其他辅助函数保持不变
-@lru_cache(maxsize=None)
-def get_session_cost(model_name, prompt_tokens, completion_tokens):
-    cost_map = {
-        "gpt-3.5-turbo": (0.5, 1.5),
-        "gpt-4o": (10, 30),
-        "gpt-4o-mini": (0.15, 0.6),
-        "o1": (15, 60),
-        "claude-3-5-sonnet": (3, 15),
-        "claude-3-haiku": (0.25, 1.25),
-        "llama-3.1-8b": (2, 2),
-    }
-
-    for key, (prompt_cost, completion_cost) in cost_map.items():
-        if key in model_name:
-            cost = (prompt_tokens * prompt_cost + completion_tokens * completion_cost) / 1e6
-            return cost if "gpt" not in key else cost * 2.5
-
-    return -1
 
 def get_cost():
     return cost
