@@ -285,6 +285,16 @@ async def plugin(question: str, contexts: str=None, sample_num: int=3):
     best_result = all_results[best_index]
     return best_result["contractd_question"]
 
+async def sf(question: str, contexts: str=None):
+    cot_trajectory = await cot(question, contexts)
+    return await sf_(question, cot_trajectory)
+
+async def cot_sc(question: str, contexts: str=None, n: int=5):
+    cot_trajectorise = await asyncio.gather(
+        *[cot(question, contexts) for _ in range(n)]
+    )
+    return await sc(question, cot_trajectorise)
+
 @retry("direct")
 async def direct(question: str, contexts: str=None):
     if isinstance(question, (list, tuple)):
@@ -305,6 +315,22 @@ async def contract(question: str, sub_result: dict, independent_subqs: list, dep
 
 @retry("ensemble")
 async def ensemble(question: str, results: list, contexts: str=None):
+    pass
+
+@retry("cot")
+async def cot(question: str, contexts: str=None):
+    pass
+
+@retry("ar")
+async def ar(question: str, contexts: str=None):
+    pass
+
+@retry("sc")
+async def sc(question: str, contexts: str=None):
+    pass
+
+@retry("sf")
+async def sf_(question: str, contexts: str=None):
     pass
 
 @contextmanager
