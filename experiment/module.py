@@ -286,14 +286,26 @@ async def plugin(question: str, contexts: str=None, sample_num: int=3):
     return best_result["contractd_question"]
 
 async def sf(question: str, contexts: str=None):
-    cot_trajectory = await cot(question, contexts)
-    return await sf_(question, cot_trajectory)
+    if contexts:
+        cot_trajectory = await cot(question, contexts=contexts)
+        return await sf_(question, cot_trajectory, contexts=contexts)
+    else:
+        cot_trajectory = await cot(question)
+        return await sf_(question, cot_trajectory)
 
 async def cot_sc(question: str, contexts: str=None, n: int=5):
-    cot_trajectorise = await asyncio.gather(
-        *[cot(question, contexts) for _ in range(n)]
-    )
-    return await sc(question, cot_trajectorise)
+    if contexts:
+        cot_trajectorise = await asyncio.gather(
+            *[cot(question, contexts) for _ in range(n)]
+        )
+        answers = [cot_trajectory["answer"] for cot_trajectory in cot_trajectorise]
+        return await sc(question, answers, contexts=contexts)
+    else:
+        cot_trajectorise = await asyncio.gather(
+            *[cot(question) for _ in range(n)]
+        )
+        answers = [cot_trajectory["answer"] for cot_trajectory in cot_trajectorise]
+        return await sc(question, answers)
 
 @retry("direct")
 async def direct(question: str, contexts: str=None):
@@ -318,19 +330,19 @@ async def ensemble(question: str, results: list, contexts: str=None):
     pass
 
 @retry("cot")
-async def cot(question: str, contexts: str=None):
+async def cot(question: str, **kwargs):
     pass
 
 @retry("ar")
-async def ar(question: str, contexts: str=None):
+async def ar(question: str, **kwargs):
     pass
 
 @retry("sc")
-async def sc(question: str, contexts: str=None):
+async def sc(question: str, answers: list, **kwargs):
     pass
 
 @retry("sf")
-async def sf_(question: str, contexts: str=None):
+async def sf_(question: str, trajectory: str=None, **kwargs):
     pass
 
 @contextmanager

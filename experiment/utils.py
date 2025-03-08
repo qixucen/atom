@@ -17,7 +17,9 @@ def extract_json(string):
         json_data = json.loads(string)
         return json_data
     except Exception as e:
-        return str(e)
+        # very small probability llm json_object response not valid
+        print("error_response:", string)
+        return {"response_error": str(e)}
 
 def extract_xml(string):
     try:

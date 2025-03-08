@@ -15,6 +15,20 @@ def direct(question: str):
     )
     return prompt
 
+def cot(question: str):
+    instruction = """
+        Let's think step by step.
+
+        QUESTION: {question}
+    """
+    formatter = """
+        Enclose your final answer within <answer>single letter of your chosen option</answer> tags.
+    """
+    prompt = (instruction + formatter).format(
+        question=question,
+    )
+    return prompt
+
 def multistep(question: str):
     instruction = """
         You are a precise multiple choice question solver. Break down complex questions into simpler sub-questions to select the most correct option:
@@ -121,6 +135,54 @@ def ensemble(question: str, solutions: list):
     prompt = instruction.format(question=question, solutions=solutions_str)
     return prompt
 
+def sf(question: str, trajectory: str):
+    instruction = """
+        Let's think step by step:
+        {question}
+        
+        Here is the reasoning process of this question:
+        {trajectory}
+        You can keep the same answer as the reasoning process, or you can improve the reasoning process to get a better answer.
+        
+        You can freely reason in your response, but please enclose the final answer within <answer>single letter of your chosen option</answer> tags
+    """
+    prompt = instruction.format(question=question, trajectory=trajectory)
+    return prompt
+
+def ar(question: str):
+    instruction = """
+        Let's think step by step:
+        {question}
+        
+        Recall three examples of multiple choice questions that are relevant to the initial problem. Note that your problems should be distinct from each other and from the initial problem (e.g., involving different numbers and names). For each problem:
+        - After "Q: ", describe the problem
+        - After "A: ", explain the solution give the answer
+        
+        Solve the Initial Problem, say "Let's solve the following multiple choice question." Then enclose the final answer within <answer>single letter of your chosen option</answer> tags
+    """
+    prompt = instruction.format(question=question)
+    return prompt
+
+def sc(question: str, answers: list):
+    instruction = """
+        You are a precise multiple choice question solver. Marginalize the final answer from the following answers.
+
+        QUESTION: {question}
+
+        ANSWERS:
+        {answers}
+
+        You can freely reason in your response, but please mark the final answer with <answer>single letter of your chosen option</answer> tags
+    """
+    answers_str = ""
+    for i, answer in enumerate(answers):
+        answers_str += f"answer {i}: {answer}\n"
+    prompt = instruction.format(
+        question=question, 
+        answers=answers_str
+    )
+    return prompt
+
 def check_answer(answer):
     if not isinstance(answer, str):
         return False
@@ -131,7 +193,7 @@ def check_answer(answer):
     return False
 
 def check(name: str, result: dict, *args):
-    if name in ["cot", "direct", "multistep", "ensemble"]:
+    if name in ["cot", "direct", "multistep", "ensemble", "sf", "sc", "ar"]:
         if not check_json(result, ["answer"]):
             return False
         if not check_answer(result["answer"]):
