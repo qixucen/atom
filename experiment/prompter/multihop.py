@@ -318,6 +318,88 @@ def ensemble(question: str, solutions: list, contexts: str = None):
     prompt = (instruction + formatter).format(question=question, contexts=contexts, solutions=solutions_str)
     return prompt
 
+def sf(question: str, trajectory: str, contexts: str):
+    instruction = """
+        Please solve the multi-hop question below based on the following contexts:
+
+        QUESTION: 
+        {question}
+
+        CONTEXTS: 
+        {contexts}
+        
+        Here is the reasoning process of this question:
+        {trajectory}
+        You can keep the same answer as the reasoning process, or you can improve the reasoning process to get a better answer.
+    """
+    formatter = """
+        Format your response as the following JSON object:
+        {{
+            "thought": "Give your step-by-step reasoning process",
+            "answer": "Your precise answer"
+        }}
+    """
+    for key in ["groundtruth", "f1", "response"]:
+        trajectory.pop(key, None)
+    prompt = (instruction + formatter).format(question=question, contexts=contexts, trajectory=trajectory)
+    return prompt
+
+def ar(question: str, contexts: str):
+    instruction = """
+        Please solve the multi-hop question below based on the following contexts:
+
+        QUESTION: 
+        {question}
+
+        CONTEXTS: 
+        {contexts}
+        
+        First, recall three examples of similar multi-hop questions that are relevant to the initial question. Note that your examples should be distinct from each other and from the initial question. For each example:
+        - After "Q: ", describe the question
+        - After "A: ", explain the solution and give the answer
+        
+        Then solve the Initial Question, say "Let's solve the following question." Then provide your response in the specified JSON format.
+        
+    """
+    
+    formatter = """
+        Format your response as the following JSON object:
+        {{
+            "thought": "Give your step-by-step reasoning process",
+            "answer": "Your precise answer"
+        }}
+    """
+    prompt = (instruction + formatter).format(question=question, contexts=contexts)
+    return prompt
+
+def sc(question: str, answers: list, contexts: str):
+    instruction = """
+        You are a precise question answering solver. Marginalize the final answer from the following answers.
+
+        QUESTION: 
+        {question}
+
+        CONTEXTS: 
+        {contexts}
+
+        ANSWERS:
+        {answers}
+
+    """
+
+    formatter = """
+        Format your response as the following JSON object:
+        {{
+            "thought": "Give your step-by-step reasoning process",
+            "answer": "Your precise answer without any explanations"
+        }}
+    """
+    answers_str = ""
+    for i, answer in enumerate(answers):
+        answers_str += f"answer {i}: {answer}\n"
+    prompt = (instruction + formatter).format(question=question, contexts=contexts, answers=answers_str)
+    return prompt
+
 # utilization
 def contexts(obj: dict, dataset: str):
     if dataset == "hotpotqa":
@@ -332,7 +414,7 @@ def contexts(obj: dict, dataset: str):
         raise ValueError("Unknown dataset format: neither 'context' nor 'paragraphs' field found")
 
 def check(name: str, result: dict, *args):
-    if name == "cot":
+    if name in ["cot", "sf", "sc", "ar"]:
         if not check_json(result, ["thought", "answer"]):
             return False
         if not isinstance(result["answer"], str) or result["answer"].lower() in ["null", "none", ""]:

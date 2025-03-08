@@ -121,6 +121,61 @@ def ensemble(question: str, solutions: list):
     prompt = instruction.format(question=question, solutions=solutions_str)
     return prompt
 
+def cot(question: str):
+    instruction = """
+        Let's think step by step:
+        {question}
+        
+        Enclose the final answer within <answer></answer> tags (pure number without units and explanations)
+    """
+    prompt = instruction.format(question=question)
+    return prompt
+
+def sf(question: str, trajectory: dict):
+    instruction = """
+        Let': think step by step:
+        {question}
+        
+        Here is the reasoning process of this question:
+        {trajectory}
+        You can keep the same answer as the reasoning process, or you can improve the reasoning process to get a better answer.
+        
+        You can freely reason in your response, but please enclose the final answer within <answer></answer> tags (pure number without units and explanations)
+    """
+    prompt = instruction.format(question=question, trajectory=trajectory)
+    return prompt
+
+def sc(question: str, answers: list):
+    instruction = """
+        You are a precise math problem solver. Marginalize the final answer from the following answers.
+
+        QUESTION: {question}
+
+        ANSWERS:
+        {answers}
+
+        You can freely reason in your response, but please mark the final answer with <answer></answer> tags (pure number without units and explanations)
+    """
+    answers_str = ""
+    for i, answer in enumerate(answers):
+        answers_str += f"answer {i}: {answer}\n"
+    prompt = instruction.format(question=question, answers=answers_str)
+    return prompt
+
+def ar(question: str):
+    instruction = """
+        Let's think step by step:
+        {question}
+        
+        Recall three examples of math problems that are relevant to the initial problem. Note that your problems should be distinct from each other and from the initial problem (e.g., involving different numbers and names). For each problem:
+        - After "Q: ", describe the problem
+        - After "A: ", explain the solution give the answer (pure number without units and explanations)
+        
+        Solve the Initial Problem, say "Let's solve the following math problem." Then enclose the final answer within <answer></answer> tags (pure number without units and explanations)
+    """
+    prompt = instruction.format(question=question)
+    return prompt
+
 # utilization
 def check(name: str, result, *args):
     def is_number(x):
@@ -133,7 +188,7 @@ def check(name: str, result, *args):
     if not isinstance(result, dict):
         return False
 
-    if name in ["cot", "direct", "multistep", "ensemble"]:
+    if name in ["cot", "direct", "multistep", "ensemble", "sf", "sc", "ar"]:
         if not check_json(result, ["answer"]):
             return False
         if not isinstance(result["answer"], (str, int, float)):

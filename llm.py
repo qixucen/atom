@@ -2,7 +2,6 @@ import random
 import asyncio
 import openai
 from apikey import url, api_key
-from functools import lru_cache
 
 model_name = None
 
