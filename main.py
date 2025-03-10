@@ -7,7 +7,15 @@ from typing import Dict, List, Any, Tuple
 from tqdm.asyncio import tqdm
 
 from experiment.dataset import load_data
-from experiment.module import set_module, atom, plugin
+from experiment.module import (
+    set_module,
+    atom,
+    plugin,
+    cot,
+    sf,
+    cot_sc,
+    ar
+)
 from experiment.utils import (
     duration_formatter,
     load_json,
@@ -71,23 +79,46 @@ class ExperimentRunner:
         question_key = self.config.question_key
         tasks = []
         
-        if self.config.requires_context():
-            from experiment.prompter.multihop import contexts
-            # 处理question_key为列表的情况
-            if isinstance(question_key, list):
-                formatted_questions = [self._format_question_from_keys(item, question_key) for item in testset]
-                tasks = [atom(question, contexts(item, self.dataset)) 
-                         for question, item in zip(formatted_questions, testset)]
+        if self.mode == "atom":
+            if self.config.requires_context():
+                from experiment.prompter.multihop import contexts
+                # 处理question_key为列表的情况
+                if isinstance(question_key, list):
+                    formatted_questions = [self._format_question_from_keys(item, question_key) for item in testset]
+                    tasks = [atom(question, contexts(item, self.dataset)) 
+                            for question, item in zip(formatted_questions, testset)]
+                else:
+                    tasks = [atom(item[question_key], contexts(item, self.dataset)) for item in testset]
             else:
-                tasks = [atom(item[question_key], contexts(item, self.dataset)) for item in testset]
+                # 处理question_key为列表的情况
+                if isinstance(question_key, list):
+                    tasks = [atom(self._format_question_from_keys(item, question_key)) for item in testset]
+                else:
+                    tasks = [atom(item[question_key]) for item in testset]
         else:
-            # 处理question_key为列表的情况
-            if isinstance(question_key, list):
-                tasks = [atom(self._format_question_from_keys(item, question_key)) for item in testset]
+            # baselines
+            func_map = {
+                "cot": cot,
+                "sf": sf,
+                "cot_sc": cot_sc,
+                "ar": ar,
+            }
+            func = func_map[self.mode]
+            if self.config.requires_context():
+                from experiment.prompter.multihop import contexts
+                if isinstance(question_key, list):
+                    formatted_questions = [self._format_question_from_keys(item, question_key) for item in testset]
+                    tasks = [func(question, contexts=contexts(item, self.dataset)) 
+                            for question, item in zip(formatted_questions, testset)]
+                else:
+                    tasks = [func(item[question_key], contexts=contexts(item, self.dataset)) for item in testset]
             else:
-                tasks = [atom(item[question_key]) for item in testset]
+                if isinstance(question_key, list):
+                    tasks = [func(self._format_question_from_keys(item, question_key)) for item in testset]
+                else:
+                    tasks = [func(item[question_key]) for item in testset]
 
-        return await tqdm.gather(*tasks, desc=f"Processing {self.dataset} tasks")
+        return await tqdm.gather(*tasks, desc=f"Processing {self.dataset} tasks by {self.mode}")
     
     def _format_question_from_keys(self, item: Dict[str, Any], keys: List[str]) -> str:
         """当question_key是列表时，将多个键对应的值拼接成一个问题"""
@@ -130,11 +161,37 @@ class ExperimentRunner:
             entry["score"] = scoring_function(entry["answer"], groundtruth)
         return entry
     
+    def construct_entry_baseline(self, result: Dict[str, Any], data: Dict[str, Any]) -> Dict[str, Any]:
+        question_key = self.config.question_key
+        answer_key = self.config.answer_key
+        if isinstance(question_key, list):
+            question = self._format_question_from_keys(data, question_key)
+        else:
+            question = data[question_key]
+        groundtruth = data[answer_key]
+        entry = {
+            "problem": question,
+            "groundtruth": groundtruth,
+        }
+        if self.mode in ["cot", "sf", "cot_sc", "ar", "ap"]:
+            entry["response"] = result.get("response")
+            entry["answer"] = result.get("answer")
+        
+        scoring_function = getattr(__import__(f"experiment.utils", fromlist=[self.config.scoring_function]), 
+                                  self.config.scoring_function)
+        
+        if self.config.scoring_function == "score_math":
+            entry["score"] = scoring_function(entry["answer"], groundtruth, self.dataset)
+        else:
+            entry["score"] = scoring_function(entry["answer"], groundtruth)
+        return entry
+    
     def update_score_log(self, accuracy: float) -> None:
         """更新分数日志"""
         log_entry = {
             "start": self.start,
             "end": self.end,
+            "mode": self.mode,
             "token": {"prompt": get_token()[0], "completion": get_token()[1]},
             "call_count": get_call_count(),
             "accuracy": accuracy,
@@ -158,7 +215,10 @@ class ExperimentRunner:
         results = await self.gather_results(testset)
 
         # 构建结果
-        json_obj = [self.construct_entry(result, data) for result, data in zip(results, testset)]
+        if self.mode == "atom":
+            json_obj = [self.construct_entry(result, data) for result, data in zip(results, testset)]
+        else:
+            json_obj = [self.construct_entry_baseline(result, data) for result, data in zip(results, testset)]
         accuracy = sum(entry["score"] for entry in json_obj) / len(json_obj)
 
         # 保存结果
@@ -239,8 +299,8 @@ async def main():
                         help='End index of the dataset (-1 for all)')
     parser.add_argument('--model', type=str, default='gpt-4o-mini',
                         help='Model to use for the experiment')
-    parser.add_argument('--mode', type=str, choices=['atom', 'plugin'], default='atom',
-                        help='Mode: atom (standard experiment) or plugin (generate contracted dataset)')
+    parser.add_argument('--mode', type=str, default='atom',
+                        help='Mode: atom (standard experiment) or plugin (generate contracted dataset) or baselines (cot, sf, cot_sc, ar)')
     
     args = parser.parse_args()
     
@@ -254,6 +314,16 @@ async def main():
         )
     elif args.mode == 'atom':
         # 运行常规实验
+        runner = ExperimentRunner(
+            dataset=args.dataset,
+            model=args.model,
+            start=args.start,
+            end=args.end,
+            mode=args.mode
+        )
+        await runner.run()
+    elif args.mode in ["cot", "sf", "ar", "cot_sc"]:
+        # baselines
         runner = ExperimentRunner(
             dataset=args.dataset,
             model=args.model,
