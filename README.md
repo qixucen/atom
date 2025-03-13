@@ -54,14 +54,6 @@ Evaluate the performance of AoT on a specific dataset:
 python main.py --dataset math --start 0 --end 10 --model gpt-4o-mini
 ```
 
-### Plugin Mode: Generating Contracted Dataset
-
-Generate a contracted dataset for a specific dataset:
-
-```bash
-python main.py --dataset math --mode plugin --start 0 --end 10 --model gpt-4o-mini
-```
-
 ### Command Arguments
 
 - `--dataset`: Choose from `math`, `gsm8k`, `bbh`, `mmlu`, `hotpotqa`, or `longbench`
