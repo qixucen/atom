@@ -1,4 +1,4 @@
-# Atom of Thoughts (AoT)
+# Atom of Thoughts (AoT) for Markov LLM Test-Time Scaling
 
 ![The overview of AoT](image/aot.png)
 
