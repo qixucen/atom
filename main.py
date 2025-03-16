@@ -17,10 +17,10 @@ from experiment.utils import (
 )
 from llm import get_token, get_call_count, set_model
 
-# 配置常量
+# Configuration constants
 LOG_DIR = "log/{dataset}/{size}"
 
-# 数据集配置
+# Dataset configuration
 @dataclass
 class DatasetConfig:
     question_key: str
@@ -31,7 +31,7 @@ class DatasetConfig:
     def requires_context(self) -> bool:
         return self.module_type == "multi-hop"
 
-# 数据集配置映射
+# Dataset configuration mapping
 DATASET_CONFIGS = {
     "gsm8k": DatasetConfig(question_key="question", answer_key="answer", 
                           module_type="math", scoring_function="score_math"),
@@ -50,14 +50,14 @@ DATASET_CONFIGS = {
 
 class ExperimentRunner:
     def __init__(self, dataset: str, model: str, start: int = 0, end: int = -1, mode: str = "atom"):
-        """初始化实验运行器"""
+        # Initialize experiment runner
         self.dataset = dataset
         self.start = start
         self.end = None if end == -1 else end
         self.interval = "full" if self.end is None else f"{start}-{end}"
         self.timestamp = time.time()
         self.mode = mode
-        # 验证数据集是否支持
+        # Validate dataset support
         if dataset not in DATASET_CONFIGS:
             raise ValueError(f"Unsupported dataset: {dataset}")
             
@@ -65,7 +65,7 @@ class ExperimentRunner:
         set_model(model)
     
     async def gather_results(self, testset: List[Dict[str, Any]]) -> List[Any]:
-        """收集实验结果"""
+        # Collect experiment results
         set_module(self.config.module_type)
         
         question_key = self.config.question_key
@@ -73,7 +73,7 @@ class ExperimentRunner:
         
         if self.config.requires_context():
             from experiment.prompter.multihop import contexts
-            # 处理question_key为列表的情况
+            # Handle case where question_key is a list
             if isinstance(question_key, list):
                 formatted_questions = [self._format_question_from_keys(item, question_key) for item in testset]
                 tasks = [atom(question, contexts(item, self.dataset)) 
@@ -81,7 +81,7 @@ class ExperimentRunner:
             else:
                 tasks = [atom(item[question_key], contexts(item, self.dataset)) for item in testset]
         else:
-            # 处理question_key为列表的情况
+            # Handle case where question_key is a list
             if isinstance(question_key, list):
                 tasks = [atom(self._format_question_from_keys(item, question_key)) for item in testset]
             else:
@@ -90,7 +90,7 @@ class ExperimentRunner:
         return await tqdm.gather(*tasks, desc=f"Processing {self.dataset} tasks")
     
     def _format_question_from_keys(self, item: Dict[str, Any], keys: List[str]) -> str:
-        """当question_key是列表时，将多个键对应的值拼接成一个问题"""
+        # When question_key is a list, concatenate values from multiple keys into a single question
         parts = []
         for key in keys:
             if key in item:
@@ -98,12 +98,12 @@ class ExperimentRunner:
         return "\n".join(parts)
     
     def construct_entry(self, result: Tuple[Dict[str, Any], Any], data: Dict[str, Any]) -> Dict[str, Any]:
-        """构建结果条目"""
+        # Construct result entry
         result_data, log = result
         question_key = self.config.question_key
         answer_key = self.config.answer_key
         
-        # 处理question_key为列表的情况
+        # Handle case where question_key is a list
         if isinstance(question_key, list):
             question = self._format_question_from_keys(data, question_key)
         else:
@@ -119,11 +119,11 @@ class ExperimentRunner:
             "log": log
         }
         
-        # 动态导入评分函数
+        # Dynamically import scoring function
         scoring_function = getattr(__import__(f"experiment.utils", fromlist=[self.config.scoring_function]), 
                                   self.config.scoring_function)
         
-        # 根据评分函数的不同传递不同数量的参数
+        # Pass different parameters based on scoring function
         if self.config.scoring_function == "score_math":
             entry["score"] = scoring_function(entry["answer"], groundtruth, self.dataset)
         else:
@@ -131,7 +131,7 @@ class ExperimentRunner:
         return entry
     
     def update_score_log(self, accuracy: float) -> None:
-        """更新分数日志"""
+        # Update score log
         log_entry = {
             "start": self.start,
             "end": self.end,
@@ -150,25 +150,25 @@ class ExperimentRunner:
         save_json(score_log_file, existing_log)
     
     async def run(self) -> float:
-        """运行实验并返回准确率"""
+        # Run experiment and return accuracy
         print(f"Running {self.mode} experiment on {self.dataset} dataset from index {self.start} to {self.end}")
         
-        # 加载测试集
+        # Load test set
         testset = load_data(self.dataset, "test")[self.start:self.end]
         results = await self.gather_results(testset)
 
-        # 构建结果
+        # Build results
         json_obj = [self.construct_entry(result, data) for result, data in zip(results, testset)]
         accuracy = sum(entry["score"] for entry in json_obj) / len(json_obj)
 
-        # 保存结果
+        # Save results
         log_file = get_next_log_file(LOG_DIR, self.interval, self.dataset)
         save_json(log_file, json_obj)
         
-        # 更新分数日志
+        # Update score log
         self.update_score_log(accuracy)
 
-        # 打印结果摘要
+        # Print result summary
         print(f"Unsolved: {round((1-accuracy) * len(json_obj))}")
         print(f"Accuracy: {accuracy:.4f}")
         print(f"Time taken: {duration_formatter(time.time() - self.timestamp)}")
@@ -177,22 +177,22 @@ class ExperimentRunner:
 
 
 async def optimize_dataset(dataset: str, model: str, start: int = 0, end: int = -1):
-    """优化数据集中的问题并保存到新文件"""
+    # Optimize dataset questions and save to new file
     print(f"Optimizing {dataset} dataset questions from index {start} to {end}")
     timestamp = time.time()
     
-    # 设置模型和模块
+    # Set model and module
     set_model(model)
     config = DATASET_CONFIGS[dataset]
     set_module(config.module_type)
     
-    # 加载测试集
+    # Load test set
     testset = load_data(dataset, "test")[start:None if end == -1 else end]
     question_key = config.question_key
     if isinstance(question_key, list):
         question_key = question_key[0]
     
-    # 创建任务
+    # Create tasks
     async def process_item(item):
         try:
             if config.requires_context():
@@ -201,23 +201,23 @@ async def optimize_dataset(dataset: str, model: str, start: int = 0, end: int = 
             else:
                 optimized_question = await plugin(item[question_key])
                 
-            # 创建新条目
+            # Create new entry
             new_item = item.copy()
             new_item["original_question"] = item[question_key]
             new_item[question_key] = optimized_question
             return new_item
         except Exception as e:
             print(f"Error processing item: {e}")
-            return item  # 出错时返回原始条目
+            return item  # Return original item on error
     
-    # 并行处理所有条目
+    # Process all items in parallel
     tasks = [process_item(item) for item in testset]
     optimized_data = await tqdm.gather(*tasks, desc=f"Optimizing {dataset} questions")
     
-    # 确保输出目录存在
+    # Ensure output directory exists
     os.makedirs(f"experiment/data/{dataset}", exist_ok=True)
     
-    # 保存优化后的数据集
+    # Save optimized dataset
     output_path = f"experiment/data/{dataset}/contracted.json"
     save_json(output_path, optimized_data)
     
@@ -228,7 +228,7 @@ async def optimize_dataset(dataset: str, model: str, start: int = 0, end: int = 
     return optimized_data
 
 async def main():
-    """主函数"""
+    # Main function
     parser = argparse.ArgumentParser(description='Run experiments on various datasets')
     parser.add_argument('--dataset', type=str, default='mmlu', 
                         choices=list(DATASET_CONFIGS.keys()),
@@ -245,7 +245,7 @@ async def main():
     args = parser.parse_args()
     
     if args.mode == 'plugin':
-        # 运行插件流程
+        # Run plugin mode
         await optimize_dataset(
             dataset=args.dataset,
             model=args.model,
@@ -253,7 +253,7 @@ async def main():
             end=args.end
         )
     elif args.mode == 'atom':
-        # 运行常规实验
+        # Run standard experiment
         runner = ExperimentRunner(
             dataset=args.dataset,
             model=args.model,

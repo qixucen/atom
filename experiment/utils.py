@@ -8,8 +8,6 @@ from typing import List, Union
 
 def extract_json(string):
     try:
-        # Remove inline comments
-        # string = re.sub(r'\s*//.*$', '', string, flags=re.MULTILINE)
         string = string.strip()
         start, end = string.find("{"), string.rfind("}")
         if start != -1 and end != -1:
