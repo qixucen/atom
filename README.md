@@ -10,9 +10,6 @@ We're thrilled by the amazing community response to our [post](https://x.com/did
 
 ## 🎯 What We Will Do Next
 
-**Enhancing Reproducibility:**
-We are continuously working to improve the reproducibility of this codebase. Following our commitment, we plan to implement this framework under MetaGPT, making it more accessible for users familiar with the ecosystem.
-
 **Expanding Functionality:**
 We are developing additional features including automatic optimization (more insights can be found in our previous works [AFlow](https://arxiv.org/abs/2410.10762) and [SPO](https://arxiv.org/abs/2502.06855)) and support for custom datasets, aiming to make the framework more versatile and user-friendly.
 
