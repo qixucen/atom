@@ -230,7 +230,7 @@ async def optimize_dataset(dataset: str, model: str, start: int = 0, end: int = 
 async def main():
     # Main function
     parser = argparse.ArgumentParser(description='Run experiments on various datasets')
-    parser.add_argument('--dataset', type=str, default='mmlu', 
+    parser.add_argument('--dataset', type=str, default='math', 
                         choices=list(DATASET_CONFIGS.keys()),
                         help='Dataset to run experiment on')
     parser.add_argument('--start', type=int, default=0, 
