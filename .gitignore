@@ -1,5 +1,6 @@
 __pycache__
 experiment/__pycache__
+experiment/prompter/__pycache__
 apikey.py
 log/*
 .DS_Store
