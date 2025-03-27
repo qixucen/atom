@@ -4,3 +4,4 @@ apikey.py
 log/*
 .DS_Store
 **/.DS_Store
+temp/*
