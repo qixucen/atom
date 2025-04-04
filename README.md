@@ -8,14 +8,6 @@ This is a lightweight, standalone implementation of the paper [Atom of Thoughts 
 
 We're thrilled by the amazing community response to our [post](https://x.com/didiforx/status/1895902471635288252) (380k+ Views) and grateful for all the engaging discussions.
 
-## 🎯 What We Will Do Next
-
-**Expanding Functionality:**
-We are developing additional features including automatic optimization (more insights can be found in our previous works [AFlow](https://arxiv.org/abs/2410.10762) and [SPO](https://arxiv.org/abs/2502.06855)) and support for custom datasets, aiming to make the framework more versatile and user-friendly.
-
-**Advancing Atomic Reasoning:**
-Atomic reasoning remains underexplored, yet vital. Can LLMs master slow, atomic reasoning in the same way that models like o1 and R1 have mastered long CoT reasoning? This question requires continuous exploration and investigation. We are committed to advancing this research direction and sharing our insights with the community as we progress.
-
 ## 📖 Overview
 
 Atom of Thoughts (AoT) is a new reasoning framework that represents the solution as a composition of atomic questions. This approach transforms the reasoning process into a Markov process with atomic states, where state transitions use a two-phase mechanism: first decomposing the current question into a temporary dependency-based directed acyclic graph, then contracting its subquestions to form a new atomic question state. AoT significantly enhances large language models' performance on reasoning tasks while reducing computational waste. Additionally, these atomic states enable AoT to function as a plugin for existing test-time scaling methods, allowing for flexible integration that combines the strengths of different approaches.
@@ -25,7 +17,6 @@ Atom of Thoughts (AoT) is a new reasoning framework that represents the solution
 - **General Reasoning Capability**: Works across diverse reasoning scenarios including math, multi-choice, and multi-hop QA with the same codebase, differentiated only by task-specific prompts
 - **Plug-in Enhancement**: Can be integrated with existing test-time scaling methods to improve their performance
 - **Resource Efficiency**: Focuses computational resources on effective reasoning rather than processing historical information
-- **Superior Performance**: Outperforms existing methods across multiple benchmarks, enabling gpt-4o-mini to surpass o3-mini by 3.4% and DeepSeek-R1 by 10.6% on HotpotQA
 
 ## ⚙️ API Configuration Setup
 
