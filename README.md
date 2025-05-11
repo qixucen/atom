@@ -51,7 +51,7 @@ The `plugin` mode enables AoT to serve as a preprocessing step that generates co
 ## 📝 Citation
 
 ```bibtex
-@article{teng2024atom,
+@article{teng2025atom,
   title={Atom of Thoughts for Markov LLM Test-Time Scaling},
   author={Teng, Fengwei and Yu, Zhaoyang and Shi, Quan and Zhang, Jiayi and Wu, Chenglin and Luo, Yuyu},
   journal={arXiv preprint arXiv:2502.12018},
