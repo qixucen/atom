@@ -3,7 +3,7 @@ This is a official implementation of the paper [Atom of Thoughts for Markov LLM 
 
 ## 📰 News
 
-We're thrilled by the amazing community response to our [post](https://x.com/didiforx/status/1895902471635288252) (380k+ Views) and grateful for all the engaging discussions.
+- We're thrilled by the amazing community response to our [post](https://x.com/didiforx/status/1895902471635288252) (390k+ Views) and grateful for all the engaging discussions.
 
 ## 📖 Overview
 
