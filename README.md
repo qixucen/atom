@@ -3,6 +3,8 @@ This is a official implementation of the paper [Atom of Thoughts for Markov LLM 
 
 ## 📰 News
 
+- We plan to refactor this repository into a foundational codebase suitable for building more general reasoning frameworks, including stable LLM calls and more user-friendly and readable logging. Stay tuned for updates!
+
 - We're thrilled by the amazing community response to our [post](https://x.com/didiforx/status/1895902471635288252) (390k+ Views) and grateful for all the engaging discussions.
 
 ## 📖 Overview
