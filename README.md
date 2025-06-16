@@ -1,4 +1,11 @@
 # Atom of Thoughts for Markov LLM Test-Time Scaling
+
+<div align="center">
+
+[![Paper](https://img.shields.io/badge/paper-A42C25?style=for-the-badge&logo=arxiv&logoColor=white)](https://arxiv.org/abs/2502.12018) [![Github](https://img.shields.io/badge/AoT-000000?style=for-the-badge&logo=github&logoColor=white)](https://github.com/steamedbun/atom) [![Twitter](https://img.shields.io/badge/Twitter_(390k+_Views)-%23000000.svg?style=for-the-badge&logo=twitter&logoColor=white)](https://x.com/didiforx/status/1895902471635288252)
+
+</div>
+
 This is a official implementation of the paper [Atom of Thoughts for Markov LLM Test-Time Scaling](https://arxiv.org/abs/2502.12018).
 
 ## 📰 News
